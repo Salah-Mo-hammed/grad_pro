@@ -1,12 +1,8 @@
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grad_project_ver_1/features/clean_you_can/student/domain/usecases/creat_student_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/domain/usecases/enroll_in_course_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/domain/usecases/get_available_courses_usecase.dart';
-import 'package:grad_project_ver_1/features/clean_you_can/student/domain/usecases/get_student_info_usecase.dart';
-import 'package:grad_project_ver_1/features/clean_you_can/student/domain/usecases/update_student_data_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/presentation/bloc/student_bloc/student_event.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/presentation/bloc/student_bloc/student_state.dart';
 
@@ -56,8 +52,10 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   ) async {
     emit(StudentLoadingState());
     final result = await enrollInCourseUsecase.call(
+      event.centerId,
       event.studentUid,
       event.courseUid,
+      event.proofImageUrl
     );
     result.fold(
       (failure) {

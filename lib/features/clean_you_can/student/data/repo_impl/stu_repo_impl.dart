@@ -30,8 +30,8 @@ class StudentRepoImpl implements StudentRepo {
   }
   
   @override
-  Future<Either<Failure, Unit>> enrollInCourse(String studentId, String courseId) {
-    return studentDataSource.enrollInCourse(studentId, courseId);
+  Future<Either<Failure, Unit>> enrollInCourse(String centerId,String studentId, String courseId,String proofImageUrl) {
+    return studentDataSource.enrollInCourse(centerId,studentId, courseId,proofImageUrl);
   }
   
   @override

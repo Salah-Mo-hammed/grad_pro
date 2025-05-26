@@ -1,4 +1,3 @@
-import 'package:grad_project_ver_1/features/clean_you_can/student/domain/entities/student_entity.dart';
 
 abstract class StudentEvent {}
 
@@ -10,10 +9,14 @@ class GetAvailableAndMineCoursesEvent extends StudentEvent {
 }
 
 class EnrollInCourseEvent extends StudentEvent {
+  String proofImageUrl;
+  String centerId;
   String studentUid;
   String courseUid;
 
   EnrollInCourseEvent({
+    required this.proofImageUrl,
+    required this.centerId,
     required this.studentUid,
     required this.courseUid,
   });

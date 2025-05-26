@@ -11,7 +11,7 @@ abstract class StudentState {
 class StudentInitialState extends StudentState {
   const StudentInitialState();
 }
-
+class StudentSuccessState extends StudentState {}
 class StudentLoadingState extends StudentState {}
 class StudentRefreshState extends StudentState {}
 

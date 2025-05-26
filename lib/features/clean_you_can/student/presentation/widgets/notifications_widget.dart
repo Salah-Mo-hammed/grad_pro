@@ -6,47 +6,45 @@ class NotificationsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: CommonWidgets().buildHeaderText(
-              "Notifications",
-              true,
-            ),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: CommonWidgets().buildHeaderText(
+            "Notifications",
+            true,
           ),
-          SliverToBoxAdapter(
-            child: _buildNotificationsText(
-              Icons.calendar_today_outlined,
-              Colors.blue,
-              "Course starting soon",
-              "please complete the assiagnmets",
-              false,
-              "Yesterday",
-            ),
+        ),
+        SliverToBoxAdapter(
+          child: _buildNotificationsText(
+            Icons.calendar_today_outlined,
+            Colors.blue,
+            "Course starting soon",
+            "please complete the assiagnmets",
+            false,
+            "Yesterday",
           ),
-          SliverToBoxAdapter(
-            child: _buildNotificationsText(
-              Icons.messenger_outline,
-              Colors.green,
-              "message from instructor",
-              "your certificates for prof skills",
-              false,
-              "Sun",
-            ),
+        ),
+        SliverToBoxAdapter(
+          child: _buildNotificationsText(
+            Icons.messenger_outline,
+            Colors.green,
+            "message from instructor",
+            "your certificates for prof skills",
+            false,
+            "Sun",
           ),
-          SliverToBoxAdapter(
-            child: _buildNotificationsText(
-              Icons.done_outline,
-              Colors.yellow[800]!,
-              "Certificates Available",
-              "your :web dev course  starts tomorrow at 10:00 AM",
-              true,
-              "15 April",
-            ),
+        ),
+        SliverToBoxAdapter(
+          child: _buildNotificationsText(
+            Icons.done_outline,
+            Colors.yellow[800]!,
+            "Certificates Available",
+            "your :web dev course  starts tomorrow at 10:00 AM",
+            true,
+            "15 April",
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

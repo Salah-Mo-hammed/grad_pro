@@ -6,27 +6,25 @@ class CertificatesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: CommonWidgets().buildHeaderText(
-              "Certificates",
-              true,
-            ),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: CommonWidgets().buildHeaderText(
+            "Certificates",
+            true,
           ),
-          SliverToBoxAdapter(
-            child: CommonWidgets().buildSubTitleText(
-              "Your achievements and completed courses",
-            ),
+        ),
+        SliverToBoxAdapter(
+          child: CommonWidgets().buildSubTitleText(
+            "Your achievements and completed courses",
           ),
-             SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return CommonWidgets().buildStack(true);
-            }, childCount: 5),
-          ),
-        ],
-      ),
+        ),
+           SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return CommonWidgets().buildStack(true);
+          }, childCount: 5),
+        ),
+      ],
     );
   }
 }

@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     // uncomment this to stop auto sign in
 
-    FirebaseAuth.instance.signOut();
+    // FirebaseAuth.instance.signOut();
     print("done sugn out");
     super.initState();
     // Fade-in the center image

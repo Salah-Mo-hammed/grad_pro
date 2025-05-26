@@ -56,7 +56,7 @@ class _AuthWidgetState extends State<AuthWidget> {
       final userRole = state.authUser.role;
       // isVerified means that user recieved email verification  and verified the email
       if (state.authUser.isVerified) {
-        if (userRole == "Trainer") {
+        if (userRole == "Trainer") { //! here change trainer problem *****
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

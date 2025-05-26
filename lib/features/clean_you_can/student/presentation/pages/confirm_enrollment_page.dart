@@ -326,6 +326,10 @@ class _ConfirmEnrollmentPageState
                             MaterialPageRoute(
                               builder:
                                   (context) => PaymentMethodPage(
+                                    centerId:
+                                        widget
+                                            .selcetedCourse
+                                            .centerId,
                                     currentStudentUid:
                                         widget.currentStudentId,
                                     currentCourseUid:

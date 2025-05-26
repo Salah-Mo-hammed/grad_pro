@@ -52,7 +52,7 @@ class CourseDetailsForStudent extends StatelessWidget {
                       builder:
                           (context) => ConfirmEnrollmentPage(
                             currentStudentId: studentId,
-                            selcetedCourse: course,
+                            selcetedCourse: course, 
                           ),
                     ),
                   );

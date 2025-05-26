@@ -21,84 +21,82 @@ class MyLearningWidget extends StatelessWidget {
     print(
       "*-*-*/-*/-/*-/-*-*-*/-*/-*-*-*--*- $filteredCourses before go to in progress",
     );
-    return Expanded(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: CommonWidgets().buildHeaderText(
+            "My Courses",
+            true,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: CommonWidgets().buildSubTitleText(
+            "Track your progress and continue learning",
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
             child: CommonWidgets().buildHeaderText(
-              "My Courses",
-              true,
+              "Completed",
+              false,
             ),
           ),
-          SliverToBoxAdapter(
-            child: CommonWidgets().buildSubTitleText(
-              "Track your progress and continue learning",
+        ),
+    
+        // SliverList(
+        //   delegate: SliverChildBuilderDelegate((context, index) {
+        //     return CommonWidgets().buildCourseCard(
+        //       studentId,
+        //       filteredCourses,
+        //       index,
+        //       true,
+        //       context,
+        //     );
+        //   }, childCount: filteredCourses.length),
+        // ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: CommonWidgets().buildHeaderText(
+              "In Progress",
+              false,
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: CommonWidgets().buildHeaderText(
-                "Completed",
-                false,
-              ),
-            ),
+        ),
+    
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return CommonWidgets().buildCourseCard(
+            currentStudentId:     studentId,
+             courses:    filteredCourses.isEmpty
+                    ? [
+                      CourseEntity(
+                        courseId: "courseId",
+                        title: " there is no course",
+                        description: "description",
+                        centerId: "centerId",
+                        startDate: DateTime.now(),
+                        endDate: DateTime.now(),
+                        maxStudents: 55,
+                        price: 98, trainerId: 'no trainer', urls: {},
+                      ),
+                    ]
+                    : filteredCourses,
+            index:     index,
+            inMyLearning:     true,
+            context:     context,
+            currentStudentName: "student"
+              );
+            },
+            childCount:
+                filteredCourses.isEmpty
+                    ? 1
+                    : filteredCourses.length,
           ),
-
-          // SliverList(
-          //   delegate: SliverChildBuilderDelegate((context, index) {
-          //     return CommonWidgets().buildCourseCard(
-          //       studentId,
-          //       filteredCourses,
-          //       index,
-          //       true,
-          //       context,
-          //     );
-          //   }, childCount: filteredCourses.length),
-          // ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: CommonWidgets().buildHeaderText(
-                "In Progress",
-                false,
-              ),
-            ),
-          ),
-
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return CommonWidgets().buildCourseCard(
-              currentStudentId:     studentId,
-               courses:    filteredCourses.isEmpty
-                      ? [
-                        CourseEntity(
-                          courseId: "courseId",
-                          title: " there is no course",
-                          description: "description",
-                          centerId: "centerId",
-                          startDate: DateTime.now(),
-                          endDate: DateTime.now(),
-                          maxStudents: 55,
-                          price: 98, trainerId: 'no trainer', urls: {},
-                        ),
-                      ]
-                      : filteredCourses,
-              index:     index,
-              inMyLearning:     true,
-              context:     context,
-              currentStudentName: "student"
-                );
-              },
-              childCount:
-                  filteredCourses.isEmpty
-                      ? 1
-                      : filteredCourses.length,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

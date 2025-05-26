@@ -5,7 +5,7 @@ import 'package:grad_project_ver_1/features/clean_you_can/student/domain/repo/st
 class EnrollInCourseUsecase {
   StudentRepo studentRepo;
 EnrollInCourseUsecase({required this.studentRepo});
-Future<Either<Failure,Unit>> call(String studentUid,String courseId){
-  return studentRepo.enrollInCourse(studentUid, courseId);
+Future<Either<Failure,Unit>> call(String centerId ,String studentUid,String courseId,String proofImageUrl){
+  return studentRepo.enrollInCourse(centerId,studentUid, courseId ,proofImageUrl);
 }
 }

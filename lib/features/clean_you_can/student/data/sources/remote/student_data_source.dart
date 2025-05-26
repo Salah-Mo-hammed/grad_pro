@@ -87,57 +87,122 @@ class WithFirebase {
     }
   }
 
+  //! old method just wen student press enroll , it shows all courses he enrolled , without checking if status is enrolled or pendeing or any thing
+  // Future<Either<Failure, Map<String, dynamic>>> getAVaialableCourses(
+  //   String studentId,
+  // ) async {
+  //   try {
+  //     // get student data first
+  //     final studentSnashot =
+  //         await _firestore
+  //             .collection("Students")
+  //             .doc(studentId)
+  //             .get();
+  //     if (!studentSnashot.exists) {
+  //       return Left(ServerFailure("faild to reach this student"));
+  //     }
+  //     //fetch registredCourses IDs from the student and save it in List<String>
+  //     final studentData =
+  //         studentSnashot.data() as Map<String, dynamic>;
+  //     // List<String> registedCourses = List<String>.from(
+  //     //   studentData['registeredCourses'] ?? [],
+  //     // );
+  //     Map<String, dynamic> studentCourses =
+  //         studentData['courses'] ?? {};
+  //     List<String> registedCourses = studentCourses.keys.toList();
+  //     // this just to fetch all the courses from the Courses collection
+  //     final snapshot = await _firestore.collection("Courses").get();
+  //     final allCourses =
+  //         snapshot.docs.map((doc) {
+  //           return CourseModel.fromJson(doc.data());
+  //         }).toList();
+  //     final filteredCourses =
+  //         allCourses
+  //             .where(
+  //               (course) => registedCourses.contains(course.courseId),
+  //             )
+  //             .toList();
+  //     Map<String, dynamic> allAndFilteredCourses = {
+  //       'allCourses': allCourses,
+  //       'filteredCourses': filteredCourses,
+  //     };
+  //     return Right(allAndFilteredCourses);
+  //   } catch (e) {
+  //     return Left(
+  //       ServerFailure(
+  //         "Faild to fetch courses because:  ${e.toString()}",
+  //       ),
+  //     );
+  //   }
+  // }
+
   Future<Either<Failure, Map<String, dynamic>>> getAVaialableCourses(
     String studentId,
   ) async {
     try {
-      // get student data first
-      final studentSnashot =
+      // Get student data
+      final studentSnapshot =
           await _firestore
               .collection("Students")
               .doc(studentId)
               .get();
-      if (!studentSnashot.exists) {
-        return Left(ServerFailure("faild to reach this student"));
+
+      if (!studentSnapshot.exists) {
+        return Left(ServerFailure("Failed to reach this student"));
       }
-      //fetch registredCourses IDs from the student and save it in List<String>
+
       final studentData =
-          studentSnashot.data() as Map<String, dynamic>;
-      // List<String> registedCourses = List<String>.from(
-      //   studentData['registeredCourses'] ?? [],
-      // );
-      Map<String, dynamic> studentCourses =
+          studentSnapshot.data() as Map<String, dynamic>;
+      final Map<String, dynamic> studentCourses =
           studentData['courses'] ?? {};
-      List<String> registedCourses = studentCourses.keys.toList();
-      // this just to fetch all the courses from the Courses collection
+
+      // Get the list of courseIds where status == "enrolled"
+      final List<String> enrolledCourseIds =
+          studentCourses.entries
+              .where(
+                (entry) =>
+                    entry.value is Map &&
+                    (entry.value['status'] ?? '') == 'enrolled',
+              )
+              .map((entry) => entry.key)
+              .toList();
+
+      // Fetch all courses
       final snapshot = await _firestore.collection("Courses").get();
       final allCourses =
-          snapshot.docs.map((doc) {
-            return CourseModel.fromJson(doc.data());
-          }).toList();
+          snapshot.docs
+              .map((doc) => CourseModel.fromJson(doc.data()))
+              .toList();
+
+      // Filter courses that are "enrolled" only
       final filteredCourses =
           allCourses
               .where(
-                (course) => registedCourses.contains(course.courseId),
+                (course) =>
+                    enrolledCourseIds.contains(course.courseId),
               )
               .toList();
-      Map<String, dynamic> allAndFilteredCourses = {
+
+      final result = {
         'allCourses': allCourses,
         'filteredCourses': filteredCourses,
       };
-      return Right(allAndFilteredCourses);
+
+      return Right(result);
     } catch (e) {
       return Left(
         ServerFailure(
-          "Faild to fetch courses because:  ${e.toString()}",
+          "Failed to fetch courses because: ${e.toString()}",
         ),
       );
     }
   }
 
   Future<Either<Failure, Unit>> enrollInCourse(
+    String centerId,
     String studentUid,
     String courseId,
+    String proofImageUrl,
   ) async {
     try {
       // references for student and course
@@ -195,7 +260,8 @@ class WithFirebase {
         transaction.update(studentRef, {
           'courses.$courseId': {
             'courseId': courseId,
-            'status': 'enrolled',
+            'status':
+                'pending', //! if payment with electirc gateway, make this enrolled , if bank transfare then pending
             'progress': 0,
             'assignments': {},
             'result': null,
@@ -205,11 +271,40 @@ class WithFirebase {
           'enrolledStudents': enrolledStudents.toList(),
         });
       });
-
+      //! uncomment send request when you pay to firebase storage
+      //  await sendRequest(studentId: studentUid, centerId: centerId, courseId: courseId, proofImageUrl: proofImageUrl);
       return Right(unit);
     } catch (e) {
       return Left(ServerFailure("Failed to enroll: ${e.toString()}"));
     }
+  }
+
+  Future<void> sendRequest({
+    required String studentId,
+    required String centerId,
+    required String courseId,
+    required String proofImageUrl,
+  }) async {
+    final requestRef =
+        _firestore.collection('course_enroll_requests').doc();
+    final studentSnap =
+        await _firestore.collection('Students').doc(studentId).get();
+
+    final studentData = studentSnap.data()!;
+    final String studentName = studentData['fullName'] ?? '';
+    final String studentPhone = studentData['phone'] ?? '';
+
+    await requestRef.set({
+      'requestId': requestRef.id,
+      'studentId': studentId,
+      'studentName': studentName,
+      'studentPhone': studentPhone,
+      'centerId': centerId,
+      'courseId': courseId,
+      'proofImageUrl': proofImageUrl,
+      'status': 'pending',
+      'createdAt': FieldValue.serverTimestamp(),
+    });
   }
 
   Future<Either<Failure, void>> createStudent(

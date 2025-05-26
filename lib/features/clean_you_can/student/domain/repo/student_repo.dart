@@ -12,8 +12,11 @@ abstract class StudentRepo {
   Future<Either<Failure, Map<String,dynamic>>>
   getAVaialableAndMineCourses(String studentId);
   Future<Either<Failure, Unit>> enrollInCourse(
+    String centerId,
     String studentId,
     String courseId,
+    String proofImageUrl,
+
   );
   //(future proparaty) Future<Either<Failure, void>> deleteStudent(int studentId);
 }
