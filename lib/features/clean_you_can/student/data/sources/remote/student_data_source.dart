@@ -202,7 +202,7 @@ class WithFirebase {
     String centerId,
     String studentUid,
     String courseId,
-    String proofImageUrl,
+    // String proofImageUrl,
   ) async {
     try {
       // references for student and course
@@ -272,7 +272,7 @@ class WithFirebase {
         });
       });
       //! uncomment send request when you pay to firebase storage
-      //  await sendRequest(studentId: studentUid, centerId: centerId, courseId: courseId, proofImageUrl: proofImageUrl);
+       await sendRequest(studentId: studentUid, centerId: centerId, courseId: courseId,/* proofImageUrl: proofImageUrl */ );
       return Right(unit);
     } catch (e) {
       return Left(ServerFailure("Failed to enroll: ${e.toString()}"));
@@ -283,7 +283,7 @@ class WithFirebase {
     required String studentId,
     required String centerId,
     required String courseId,
-    required String proofImageUrl,
+    // required String proofImageUrl,
   }) async {
     final requestRef =
         _firestore.collection('course_enroll_requests').doc();
@@ -291,8 +291,8 @@ class WithFirebase {
         await _firestore.collection('Students').doc(studentId).get();
 
     final studentData = studentSnap.data()!;
-    final String studentName = studentData['fullName'] ?? '';
-    final String studentPhone = studentData['phone'] ?? '';
+    final String studentName = studentData['name'] ?? '';
+    final String studentPhone = studentData['phoneNumber'] ?? '';
 
     await requestRef.set({
       'requestId': requestRef.id,
@@ -301,7 +301,7 @@ class WithFirebase {
       'studentPhone': studentPhone,
       'centerId': centerId,
       'courseId': courseId,
-      'proofImageUrl': proofImageUrl,
+      // 'proofImageUrl': proofImageUrl,
       'status': 'pending',
       'createdAt': FieldValue.serverTimestamp(),
     });

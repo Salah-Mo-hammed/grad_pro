@@ -25,8 +25,9 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     context.read<StudentBloc>().add(
       EnrollInCourseEvent(
         // these isnt important now ,but after solving firebase storage payment problem
-        centerId: widget.centerId,
-        proofImageUrl: '',
+           centerId: widget.centerId,
+           // proofImageUrl: '',
+           
         // this is needed to complete booking
         studentUid: widget.currentStudentUid,
         courseUid: widget.currentCourseUid,
@@ -55,12 +56,9 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     );
   }
 }
- 
 
-
-
- //! this is the final page , but after solveing firebase storage payment problem 
-//  import 'dart:io';
+//  ! this is the final page , but after solveing firebase storage payment problem
+// import 'dart:io';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -139,7 +137,6 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
 //     final url = await uploadImage(_selectedImage!);
 
 //     if (url != null) {
-//       print(url);
 //       context.read<StudentBloc>().add(
 //         EnrollInCourseEvent(
 //           centerId: widget.centerId,

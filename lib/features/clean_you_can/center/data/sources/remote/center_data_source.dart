@@ -423,20 +423,44 @@ class CenterDataSource {
     }
   }
 
-Future<Either<Failure, String>> addCourseSession(
-  String courseId,
-  String sessionTitle,
-  String sessionUrl,
-) async {
-  try {
-    final courseRef = _firestore.collection('Courses').doc(courseId);
-    await courseRef.set({
-      'urls': {sessionTitle: sessionUrl}
-    }, SetOptions(merge: true));
+  Future<Either<Failure, String>> addCourseSession(
+    String courseId,
+    String sessionTitle,
+    String sessionUrl,
+  ) async {
+    try {
+      final courseRef = _firestore
+          .collection('Courses')
+          .doc(courseId);
+      await courseRef.set({
+        'urls': {sessionTitle: sessionUrl},
+      }, SetOptions(merge: true));
 
-    return right("Session added successfully.");
-  } catch (e) {
-    return left(ServerFailure("Failed to add session: ${e.toString()}"));
+      return right("Session added successfully.");
+    } catch (e) {
+      return left(
+        ServerFailure("Failed to add session: ${e.toString()}"),
+      );
+    }
   }
-}
+
+  Future<Either<Failure, List<Map<String, dynamic>>>>
+  getCenterRequests(String centerId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection("course_enrollment_requests")
+              .where('centerId', isEqualTo: centerId)
+              .get();
+      List<Map<String, dynamic>> requestsMap =
+          snapshot.docs.map((doc) => doc.data()).toList();
+      return Right(requestsMap);
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          "problem in fetching center requests : ${e.toString()}",
+        ),
+      );
+    }
+  }
 }

@@ -15,7 +15,7 @@ abstract class StudentRepo {
     String centerId,
     String studentId,
     String courseId,
-    String proofImageUrl,
+    // String proofImageUrl,
 
   );
   //(future proparaty) Future<Either<Failure, void>> deleteStudent(int studentId);

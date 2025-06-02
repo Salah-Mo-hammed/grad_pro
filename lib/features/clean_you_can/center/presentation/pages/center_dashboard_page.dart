@@ -85,7 +85,7 @@ class _CenterDashboardState extends State<CenterDashboard> {
           index: _selectedIndex,
           children: [
             _buildCoursesPage(),
-            _buildChatChannelPage(),
+            _buildJoinRequestsPage(),
             _buildTrainersPage(),
             _buildProfilePage(),
           ],
@@ -303,15 +303,22 @@ class _CenterDashboardState extends State<CenterDashboard> {
                                       builder:
                                           (
                                             context,
-                                          ) =>CourseDetailsForCenter(course: state.courses[index], trainers: widget.availableTrainers ,isForTrainer: false,) 
-                                          // CourseDetailsPage(
-                                          //   course:
-                                          //       state.courses[index],
-                                          //   isStudent: false,
-                                          //   trainers:
-                                          //       widget
-                                          //           .availableTrainers,
-                                          // ),
+                                          ) => CourseDetailsForCenter(
+                                            course:
+                                                state.courses[index],
+                                            trainers:
+                                                widget
+                                                    .availableTrainers,
+                                            isForTrainer: false,
+                                          ),
+                                      // CourseDetailsPage(
+                                      //   course:
+                                      //       state.courses[index],
+                                      //   isStudent: false,
+                                      //   trainers:
+                                      //       widget
+                                      //           .availableTrainers,
+                                      // ),
                                     ),
                                   );
                                 },
@@ -423,50 +430,53 @@ class _CenterDashboardState extends State<CenterDashboard> {
                                   backgroundColor: Colors.deepPurple
                                       .withOpacity(0.2),
                                   child: ClipOval(
-                                    child:info.imageUrl== null?Image.asset(
-                                            'assets/images/grad_logo.png',
-                                            width: 84,
-                                            height: 84,
-                                            fit: BoxFit.cover,
-                                          ) :Image.network(
-                                      info.imageUrl!,
-                                      width: 84,
-                                      height: 84,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (
-                                            context,
-                                            error,
-                                            stackTrace,
-                                          ) => Image.asset(
-                                            'assets/images/grad_logo.png',
-                                            width: 84,
-                                            height: 84,
-                                            fit: BoxFit.cover,
-                                          ),
-                                      loadingBuilder: (
-                                        context,
-                                        child,
-                                        loadingProgress,
-                                      ) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value:
-                                                loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        (loadingProgress
-                                                                .expectedTotalBytes ??
-                                                            1)
-                                                    : null,
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                    child:
+                                        info.imageUrl == null
+                                            ? Image.asset(
+                                              'assets/images/grad_logo.png',
+                                              width: 84,
+                                              height: 84,
+                                              fit: BoxFit.cover,
+                                            )
+                                            : Image.network(
+                                              info.imageUrl!,
+                                              width: 84,
+                                              height: 84,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => Image.asset(
+                                                    'assets/images/grad_logo.png',
+                                                    width: 84,
+                                                    height: 84,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                              loadingBuilder: (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress ==
+                                                    null)
+                                                  return child;
+                                                return Center(
+                                                  child: CircularProgressIndicator(
+                                                    value:
+                                                        loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                (loadingProgress.expectedTotalBytes ??
+                                                                    1)
+                                                            : null,
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                   ),
                                 ),
                               ),
@@ -836,46 +846,172 @@ class _CenterDashboardState extends State<CenterDashboard> {
     );
   }
 
-  Widget _buildChatChannelPage() {
+  Widget _buildJoinRequestsPage() {
+    final dummyRequests = [
+      {
+        "studentName": "Alice Johnson",
+        "courseTitle": "Flutter Development",
+      },
+      {"studentName": "Bob Smith", "courseTitle": "Advanced Java"},
+    ];
+
     return FadeIn(
-      duration: const Duration(milliseconds: 520),
-      child: Center(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 6,
-          color: const Color(0xFFF7EEDD),
-          shadowColor: AppColors.bronze.withOpacity(0.14),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 36,
-              vertical: 35,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.chat,
-                  size: 55,
-                  color: AppColors.softBrown,
+      duration: const Duration(milliseconds: 500),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FadeInDown(
+              duration: const Duration(milliseconds: 650),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
                 ),
-                const SizedBox(height: 15),
-                Text(
-                  "Chat Channel",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.brown,
+                elevation: 8,
+                color: AppColors.gold.withOpacity(0.14),
+                shadowColor: AppColors.brown.withOpacity(0.17),
+                child: Padding(
+                  padding: const EdgeInsets.all(22.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Join Requests",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.brown,
+                        ),
+                      ),
+                      const SizedBox(height: 7),
+                      Text(
+                        "Review and approve student requests.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.mediumGray,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(height: 22),
+            Expanded(
+              child: ListView.separated(
+                separatorBuilder:
+                    (_, __) => const SizedBox(height: 14),
+                itemCount: dummyRequests.length,
+                itemBuilder: (context, index) {
+                  final request = dummyRequests[index];
+                  return FadeInUp(
+                    duration: Duration(
+                      milliseconds: 300 + index * 90,
+                    ),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 6,
+                      color: Colors.white,
+                      shadowColor: AppColors.taupe.withOpacity(0.16),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: AppColors.taupe
+                              .withOpacity(0.14),
+                          radius: 24,
+                          child: const Icon(
+                            Icons.person,
+                            color: AppColors.bronze,
+                            size: 26,
+                          ),
+                        ),
+                        title: Text(
+                          request["studentName"]!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: AppColors.brown,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "Requested to join: ${request["courseTitle"]}",
+                          style: TextStyle(
+                            color: AppColors.mediumGray,
+                          ),
+                        ),
+                        trailing: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.gold,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            // Approve action placeholder
+                          },
+                          child: const Text(
+                            "Approve",
+                            style: TextStyle(
+                              color: AppColors.bronze,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  // Widget _buildChatChannelPage() {
+  //   return FadeIn(
+  //     duration: const Duration(milliseconds: 520),
+  //     child: Center(
+  //       child: Card(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16),
+  //         ),
+  //         elevation: 6,
+  //         color: const Color(0xFFF7EEDD),
+  //         shadowColor: AppColors.bronze.withOpacity(0.14),
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(
+  //             horizontal: 36,
+  //             vertical: 35,
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const Icon(
+  //                 Icons.chat,
+  //                 size: 55,
+  //                 color: AppColors.softBrown,
+  //               ),
+  //               const SizedBox(height: 15),
+  //               Text(
+  //                 "Chat Channel",
+  //                 style: TextStyle(
+  //                   fontSize: 23,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: AppColors.brown,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildTrainersPage() {
     return Padding(

@@ -9,13 +9,13 @@ class GetAvailableAndMineCoursesEvent extends StudentEvent {
 }
 
 class EnrollInCourseEvent extends StudentEvent {
-  String proofImageUrl;
+  // String proofImageUrl;
   String centerId;
   String studentUid;
   String courseUid;
 
   EnrollInCourseEvent({
-    required this.proofImageUrl,
+    // required this.proofImageUrl,
     required this.centerId,
     required this.studentUid,
     required this.courseUid,
