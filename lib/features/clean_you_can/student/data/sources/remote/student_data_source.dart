@@ -202,6 +202,8 @@ class WithFirebase {
     String centerId,
     String studentUid,
     String courseId,
+    String courseName,
+
     // String proofImageUrl,
   ) async {
     try {
@@ -272,7 +274,7 @@ class WithFirebase {
         });
       });
       //! uncomment send request when you pay to firebase storage
-       await sendRequest(studentId: studentUid, centerId: centerId, courseId: courseId,/* proofImageUrl: proofImageUrl */ );
+       await sendRequest(studentId: studentUid, centerId: centerId, courseId: courseId,courseName: courseName,/* proofImageUrl: proofImageUrl */ );
       return Right(unit);
     } catch (e) {
       return Left(ServerFailure("Failed to enroll: ${e.toString()}"));
@@ -283,6 +285,7 @@ class WithFirebase {
     required String studentId,
     required String centerId,
     required String courseId,
+    required String courseName,
     // required String proofImageUrl,
   }) async {
     final requestRef =
@@ -301,8 +304,9 @@ class WithFirebase {
       'studentPhone': studentPhone,
       'centerId': centerId,
       'courseId': courseId,
+      'courseName': courseName,
+
       // 'proofImageUrl': proofImageUrl,
-      'status': 'pending',
       'createdAt': FieldValue.serverTimestamp(),
     });
   }

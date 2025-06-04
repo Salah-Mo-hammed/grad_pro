@@ -16,6 +16,7 @@ class CenterDataSource {
   // final _firebaseAuth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   //! center_trainer_bloc deal with this
+
   Future<Either<Failure, String>> createTrainer(
     TrainerModel newTrainer,
     String password,
@@ -444,21 +445,82 @@ class CenterDataSource {
     }
   }
 
+  //! center_requests_bloc
+  Future<Either<Failure, void>> approveJoinRequest(
+    Map<String, dynamic> requestMap,
+  ) async {
+    try {
+      print(requestMap.keys);
+      print(requestMap.values);
+
+      final studentRef = FirebaseFirestore.instance
+          .collection('Students')
+          .doc(requestMap['studentId']);
+      final requestRef = FirebaseFirestore.instance
+          .collection('course_enroll_requests')
+          .doc(requestMap['requestId']);
+
+      await FirebaseFirestore.instance.runTransaction((
+        transaction,
+      ) async {
+        final studentSnapshot = await transaction.get(studentRef);
+
+        if (!studentSnapshot.exists) {
+          throw Exception("Student not found");
+        }
+
+        final studentData =
+            studentSnapshot.data() as Map<String, dynamic>;
+
+        // Extract coursesMap
+        final coursesMap = Map<String, dynamic>.from(
+          studentData['courses'] ?? {},
+        );
+
+        if (!coursesMap.containsKey(requestMap['courseId'])) {
+          throw Exception("Course not found in student's coursesMap");
+        }
+
+        // Update the status to approved
+        coursesMap[requestMap['courseId']]['status'] = 'approved';
+
+        // Update the student doc
+        transaction.update(studentRef, {'courses': coursesMap});
+
+        // Delete the request
+        transaction.delete(requestRef);
+      });
+
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ServerFailure("Failed to approve request: ${e.toString()}"),
+      );
+    }
+  }
+
   Future<Either<Failure, List<Map<String, dynamic>>>>
   getCenterRequests(String centerId) async {
     try {
       final snapshot =
           await _firestore
-              .collection("course_enrollment_requests")
+              .collection(
+                "course_enroll_requests",
+              ) // corrected name here
               .where('centerId', isEqualTo: centerId)
               .get();
+
       List<Map<String, dynamic>> requestsMap =
-          snapshot.docs.map((doc) => doc.data()).toList();
+          snapshot.docs.map((doc) {
+            final data = doc.data();
+            data['requestId'] = doc.id; // Add document Id to approve
+            return data;
+          }).toList();
       return Right(requestsMap);
     } catch (e) {
       return Left(
         ServerFailure(
-          "problem in fetching center requests : ${e.toString()}",
+          "Problem in fetching center requests: ${e.toString()}",
         ),
       );
     }

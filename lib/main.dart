@@ -6,6 +6,7 @@ import 'package:grad_project_ver_1/features/auth/presintation/bloc/auth_bloc.dar
 import 'package:grad_project_ver_1/features/chat/presintation/bloc/chat_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_courses_bloc/center_courses_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_general_bloc/center_general_bloc.dart';
+import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_requests_bloc/center_requests_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_trainer_bloc/center_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/presentation/bloc/student_bloc/student_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/presentation/bloc/student_general_bloc/bloc/student_general_bloc_bloc.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CenterCoursesBloc>(
           create: (_) => sl<CenterCoursesBloc>(),
+        ),
+        BlocProvider<CenterRequestsBloc>(
+          create: (_) => sl<CenterRequestsBloc>(),
         ),
         BlocProvider<TrainerBloc>(create: (_) => sl<TrainerBloc>()),
         BlocProvider<ChatBloc>(create: (_) => sl<ChatBloc>()),

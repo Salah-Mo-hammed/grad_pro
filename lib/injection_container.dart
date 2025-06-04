@@ -22,17 +22,20 @@ import 'package:grad_project_ver_1/features/clean_you_can/center/data/repo_impl/
 import 'package:grad_project_ver_1/features/clean_you_can/center/data/sources/remote/center_data_source.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/repo/center_repo.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/add_course_session_usecase.dart';
+import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/approve_join_request_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/create_centerusecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/create_course_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/delete_course_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/fetch_center_trainers_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/get_center_courses_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/get_center_info_usecase.dart';
+import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/get_center_requests_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/get_course_students.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/update_center_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/domain/usecases/update_course_usecase.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_courses_bloc/center_courses_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_general_bloc/center_general_bloc.dart';
+import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_requests_bloc/center_requests_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_trainer_bloc/center_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/data/repo_impl/stu_repo_impl.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/data/sources/remote/student_data_source.dart';
@@ -162,6 +165,13 @@ Future<void> initialaizedDependencies() async {
   sl.registerSingleton<AddCourseSessionUsecase>(
     AddCourseSessionUsecase(centerRepo: sl<CenterRepo>()),
   );
+  sl.registerSingleton<GetCenterRequestsUsecase>(
+    GetCenterRequestsUsecase(centerRepo: sl<CenterRepo>()),
+  );
+  sl.registerSingleton<ApproveJoinRequestUsecase>(
+    ApproveJoinRequestUsecase(centerRepo: sl<CenterRepo>()),
+  );
+
   sl.registerSingleton<GetTrienerCoursesUsecase>(
     GetTrienerCoursesUsecase(trianerRepo: sl<TrianerRepo>()),
   );
@@ -211,6 +221,7 @@ Future<void> initialaizedDependencies() async {
       createTrainerUsecase: sl<CreateTrainerUsecase>(),
     ),
   );
+  sl.registerFactory(()=>CenterRequestsBloc(getCenterRequestsUsecase: sl<GetCenterRequestsUsecase>(), approveJoinRequestUsecase: sl<ApproveJoinRequestUsecase>()));
 
   sl.registerFactory(
     () => CenterGeneralBloc(

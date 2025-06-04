@@ -322,6 +322,7 @@ class _ConfirmEnrollmentPageState
                       onPressed: () {
                         //! evry condition here have it own event or you can make it with one event but it has parameter called index ()
                         if (isAgree && currentIndex != -1) {
+                          //! notification event
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder:
@@ -336,6 +337,8 @@ class _ConfirmEnrollmentPageState
                                         widget
                                             .selcetedCourse
                                             .courseId,
+                                    currentCourseName:
+                                        widget.selcetedCourse.title,
                                   ),
                             ),
                           );

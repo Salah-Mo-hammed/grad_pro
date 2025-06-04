@@ -140,4 +140,15 @@ class CenterRepoImpl implements CenterRepo {
   Future<Either<Failure, String>> addCourseSession(String courseId, String sessionTitle, String sessionUrl) {
     return centerDataSource.addCourseSession(courseId, sessionTitle, sessionUrl);
   }
+  
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getCenterRequests(String centerId) {
+    return centerDataSource.getCenterRequests(centerId);
+  }
+  
+  @override
+  Future<Either<Failure, void>> approveJoinRequest(Map<String, dynamic> requestMap) {
+return centerDataSource.approveJoinRequest(requestMap);
+  
+  }
 }

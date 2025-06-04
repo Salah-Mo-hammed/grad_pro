@@ -18,6 +18,10 @@ abstract class CenterRepo {
    //! for center_trainers_bloc
    Future<Either<Failure,String>> createTrainer(TrainerEntity newTrainer,String password);
   Future<Either<Failure,List<TrainerEntity>>> fetchCenterTrainers(String centerId);
+  Future<Either<Failure, List<Map<String, dynamic>>>>
+  getCenterRequests(String centerId);
+  Future<Either<Failure,void>> approveJoinRequest(Map<String,dynamic> requestMap);
+
   //! for center_general_bloc
   Future<Either<Failure, void>> createCenter(CenterEntity newCenter);
   Future<Either<Failure, CenterEntity>> getCenterInfo(String centerId);

@@ -178,7 +178,7 @@ class _ContinueInfoState extends State<ContinueInfo> {
                                 color: Colors.orange[900],
                               ),
                               child: Center(
-                                child: GestureDetector(
+                                child: InkWell(
                                   onTap: () => _saveInfo(),
 
                                   child: SizedBox(
@@ -266,7 +266,8 @@ class _ContinueInfoState extends State<ContinueInfo> {
         name: name,
         email: widget.email,
         phoneNumber: phone,
-        address: address, courses: {},
+        address: address,
+        courses: {},
       );
       context.read<StudentGeneralBloc>().add(
         CreateStudentEvent(createStudent: createStudent),

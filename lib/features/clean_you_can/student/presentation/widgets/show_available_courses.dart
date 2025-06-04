@@ -88,7 +88,7 @@ class _ShowAvailableCoursesWidgetState
             ),
           ),
         ),
-    
+
         //!  List of Cards
         BlocBuilder<StudentBloc, StudentState>(
           builder: (context, state) {
@@ -96,11 +96,16 @@ class _ShowAvailableCoursesWidgetState
               final allCourses = state.allCourses;
               //! we made this , because after student enroll in course , the course status is pending , so best way to not pay again for same course is by just show nonenrolledcourses
               //! here i have the all courses and enrolled courses , i just make all courses - enrolled courses = non enrolledcourses (these what we will show in available courses)
-            List<CourseEntity> enrolledCourses=allCourses['filteredCourses'];
+              List<CourseEntity> enrolledCourses =
+                  allCourses['filteredCourses'];
               List<CourseEntity> availableCourses =
                   allCourses['allCourses'];
-                 List<CourseEntity> nonEnrolledCourses=availableCourses.where((course){
-                    return !enrolledCourses.any((enrolled)=> enrolled.courseId==course.courseId);
+              List<CourseEntity> nonEnrolledCourses =
+                  availableCourses.where((course) {
+                    return !enrolledCourses.any(
+                      (enrolled) =>
+                          enrolled.courseId == course.courseId,
+                    );
                   }).toList();
               return SliverList(
                 delegate: SliverChildListDelegate([
@@ -196,7 +201,7 @@ class _ShowAvailableCoursesWidgetState
                       ),
                     ),
                   ),
-    
+
                   /// Header for recent courses
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -222,26 +227,24 @@ class _ShowAvailableCoursesWidgetState
                       ],
                     ),
                   ),
-    
+
                   /// Course cards
                   ...List.generate(nonEnrolledCourses.length, (
                     index,
                   ) {
                     return CommonWidgets().buildCourseCard(
-                   currentStudentId:    widget.studentId,
-                 courses:      nonEnrolledCourses,
-                    index:   index,
-                  inMyLearning:     false,
-                   context:    context,
+                      currentStudentId: widget.studentId,
+                      courses: nonEnrolledCourses,
+                      index: index,
+                      inMyLearning: false,
+                      context: context,
                     );
                   }),
                 ]),
               );
             } else if (state is StudentExceptionState) {
               return SliverToBoxAdapter(
-                child: Center(
-                  child: Text(state.message.toString()),
-                ),
+                child: Center(child: Text(state.message.toString())),
               );
             } else {
               context.read<StudentBloc>().add(
@@ -249,7 +252,7 @@ class _ShowAvailableCoursesWidgetState
                   studentId: widget.studentId,
                 ),
               );
-    
+
               return SliverToBoxAdapter(
                 child: Center(child: CircularProgressIndicator()),
               );

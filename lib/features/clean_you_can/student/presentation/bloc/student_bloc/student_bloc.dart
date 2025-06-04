@@ -55,6 +55,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       event.centerId,
       event.studentUid,
       event.courseUid,
+      event.courseName
       // event.proofImageUrl
     );
     result.fold(

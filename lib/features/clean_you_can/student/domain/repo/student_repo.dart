@@ -15,6 +15,8 @@ abstract class StudentRepo {
     String centerId,
     String studentId,
     String courseId,
+    String courseName,
+
     // String proofImageUrl,
 
   );

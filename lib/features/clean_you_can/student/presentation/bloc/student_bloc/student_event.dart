@@ -13,11 +13,14 @@ class EnrollInCourseEvent extends StudentEvent {
   String centerId;
   String studentUid;
   String courseUid;
+  String courseName;
+
 
   EnrollInCourseEvent({
     // required this.proofImageUrl,
     required this.centerId,
     required this.studentUid,
     required this.courseUid,
+    required this.courseName
   });
 }

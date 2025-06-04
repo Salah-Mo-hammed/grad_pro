@@ -6,6 +6,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:grad_project_ver_1/core/colors/app_color.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_courses_bloc/center_courses_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_general_bloc/center_general_bloc.dart';
+import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_requests_bloc/center_requests_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_trainer_bloc/center_bloc.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_trainer_bloc/center_event.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/presentation/blocs/center_trainer_bloc/center_state.dart';
@@ -114,8 +115,8 @@ class _CenterDashboardState extends State<CenterDashboard> {
               label: 'Courses',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'Chat',
+              icon: Icon(Icons.pending_actions),
+              label: 'Requests',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.people_alt_outlined),
@@ -847,130 +848,292 @@ class _CenterDashboardState extends State<CenterDashboard> {
   }
 
   Widget _buildJoinRequestsPage() {
-    final dummyRequests = [
-      {
-        "studentName": "Alice Johnson",
-        "courseTitle": "Flutter Development",
-      },
-      {"studentName": "Bob Smith", "courseTitle": "Advanced Java"},
-    ];
+    return BlocBuilder<CenterRequestsBloc, CenterRequestsState>(
+      builder: (context, state) {
+        print("---------------------***** state in requests $state");
+        // Trigger event once when widget is built
+        if (state is CenterRequestsInitial) {
+          context.read<CenterRequestsBloc>().add(
+            GetCenterRequestsEvent(centerId: widget.centerId),
+          );
+          return const Center(child: Text("wait please...."));
+        }
 
-    return FadeIn(
-      duration: const Duration(milliseconds: 500),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FadeInDown(
-              duration: const Duration(milliseconds: 650),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                elevation: 8,
-                color: AppColors.gold.withOpacity(0.14),
-                shadowColor: AppColors.brown.withOpacity(0.17),
-                child: Padding(
-                  padding: const EdgeInsets.all(22.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Join Requests",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.brown,
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      Text(
-                        "Review and approve student requests.",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: AppColors.mediumGray,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 22),
-            Expanded(
-              child: ListView.separated(
-                separatorBuilder:
-                    (_, __) => const SizedBox(height: 14),
-                itemCount: dummyRequests.length,
-                itemBuilder: (context, index) {
-                  final request = dummyRequests[index];
-                  return FadeInUp(
-                    duration: Duration(
-                      milliseconds: 300 + index * 90,
-                    ),
+        if (state is CenterRequestsLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is CenterRequestsDoneState) {
+          final requests = state.requests;
+
+          if (requests.isEmpty) {
+            return const Center(
+              child: Text("No join requests found."),
+            );
+          }
+
+          return FadeIn(
+            duration: const Duration(milliseconds: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FadeInDown(
+                    duration: const Duration(milliseconds: 650),
                     child: Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(18),
                       ),
-                      elevation: 6,
-                      color: Colors.white,
-                      shadowColor: AppColors.taupe.withOpacity(0.16),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: AppColors.taupe
-                              .withOpacity(0.14),
-                          radius: 24,
-                          child: const Icon(
-                            Icons.person,
-                            color: AppColors.bronze,
-                            size: 26,
-                          ),
-                        ),
-                        title: Text(
-                          request["studentName"]!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: AppColors.brown,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "Requested to join: ${request["courseTitle"]}",
-                          style: TextStyle(
-                            color: AppColors.mediumGray,
-                          ),
-                        ),
-                        trailing: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.gold,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      elevation: 8,
+                      color: AppColors.gold.withOpacity(0.14),
+                      shadowColor: AppColors.brown.withOpacity(0.17),
+                      child: Padding(
+                        padding: const EdgeInsets.all(22.0),
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Check Requests",
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.brown,
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            // Approve action placeholder
-                          },
-                          child: const Text(
-                            "Approve",
-                            style: TextStyle(
-                              color: AppColors.bronze,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 7),
+                            Text(
+                              "Review and approve student requests.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.mediumGray,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 22),
+                  Expanded(
+                    child: ListView.separated(
+                      separatorBuilder:
+                          (_, __) => const SizedBox(height: 14),
+                      itemCount: requests.length,
+                      itemBuilder: (context, index) {
+                        final request = requests[index];
+                        return FadeInUp(
+                          duration: Duration(
+                            milliseconds: 300 + index * 90,
+                          ),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 6,
+                            color: Colors.white,
+                            shadowColor: AppColors.taupe.withOpacity(
+                              0.16,
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: AppColors.taupe
+                                    .withOpacity(0.14),
+                                radius: 24,
+                                child: const Icon(
+                                  Icons.person,
+                                  color: AppColors.bronze,
+                                  size: 26,
+                                ),
+                              ),
+                              title: Text(
+                                request['studentName'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: AppColors.brown,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "Requested to join: ${request['courseName']}",
+                                style: TextStyle(
+                                  color: AppColors.mediumGray,
+                                ),
+                              ),
+                              trailing: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.gold,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<CenterRequestsBloc>()
+                                      .add(
+                                        ApproveJoinRequestEvent(
+                                          requestMap: request,
+                                        ),
+                                      );
+                                },
+                                child: const Text(
+                                  "Approve",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+
+        if (state is CenterRequestsExceptionState) {
+          return Center(child: Text(state.message));
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
+
+  // Widget _buildJoinRequestsPage() {
+  //   final dummyRequests = [
+  //     {
+  //       "studentName": "Alice Johnson",
+  //       "courseTitle": "Flutter Development",
+  //     },
+  //     {"studentName": "Bob Smith", "courseTitle": "Advanced Java"},
+  //   ];
+
+  //   return FadeIn(
+  //     duration: const Duration(milliseconds: 500),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           FadeInDown(
+  //             duration: const Duration(milliseconds: 650),
+  //             child: Card(
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(18),
+  //               ),
+  //               elevation: 8,
+  //               color: AppColors.gold.withOpacity(0.14),
+  //               shadowColor: AppColors.brown.withOpacity(0.17),
+  //               child: Padding(
+  //                 padding: const EdgeInsets.all(22.0),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Text(
+  //                       "Join Requests",
+  //                       style: TextStyle(
+  //                         fontSize: 25,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: AppColors.brown,
+  //                       ),
+  //                     ),
+  //                     const SizedBox(height: 7),
+  //                     Text(
+  //                       "Review and approve student requests.",
+  //                       style: TextStyle(
+  //                         fontSize: 16,
+  //                         color: AppColors.mediumGray,
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           const SizedBox(height: 22),
+  //           Expanded(
+  //             //! requests in center
+  //             child: ListView.separated(
+  //               separatorBuilder:
+  //                   (_, __) => const SizedBox(height: 14),
+  //               itemCount: dummyRequests.length,
+  //               itemBuilder: (context, index) {
+  //                 final request = dummyRequests[index];
+  //                 return FadeInUp(
+  //                   duration: Duration(
+  //                     milliseconds: 300 + index * 90,
+  //                   ),
+  //                   child: Card(
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(14),
+  //                     ),
+  //                     elevation: 6,
+  //                     color: Colors.white,
+  //                     shadowColor: AppColors.taupe.withOpacity(0.16),
+  //                     child: ListTile(
+  //                       leading: CircleAvatar(
+  //                         backgroundColor: AppColors.taupe
+  //                             .withOpacity(0.14),
+  //                         radius: 24,
+  //                         child: const Icon(
+  //                           Icons.person,
+  //                           color: AppColors.bronze,
+  //                           size: 26,
+  //                         ),
+  //                       ),
+  //                       title: Text(
+  //                         request["studentName"]!,
+  //                         style: TextStyle(
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 18,
+  //                           color: AppColors.brown,
+  //                         ),
+  //                       ),
+  //                       subtitle: Text(
+  //                         "Requested to join: ${request["courseTitle"]}",
+  //                         style: TextStyle(
+  //                           color: AppColors.mediumGray,
+  //                         ),
+  //                       ),
+  //                       trailing: ElevatedButton(
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: AppColors.gold,
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(8),
+  //                           ),
+  //                         ),
+  //                         onPressed: () {
+  //                           // Approve action placeholder
+  //                         },
+  //                         child: const Text(
+  //                           "Approve",
+  //                           style: TextStyle(
+  //                             color: AppColors.bronze,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Widget _buildChatChannelPage() {
   //   return FadeIn(
