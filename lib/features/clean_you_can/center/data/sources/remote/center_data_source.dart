@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grad_project_ver_1/core/errors/failure.dart';
 import 'package:grad_project_ver_1/features/auth/data/source/remote/auth_data_source.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/center/data/models/center_model.dart';
-import 'package:grad_project_ver_1/features/clean_you_can/center/domain/entities/center_entity.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/course/data/models/course_model.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/student/data/models/student_model.dart';
 import 'package:grad_project_ver_1/features/clean_you_can/trainer/data/models/trainer_model.dart';
